@@ -3,19 +3,68 @@ import requests
 from lxml import html
 from icalendar import Calendar, Event
 from datetime import datetime
+import redis
+
+# Cache object represents Redis connection to cache Liquipedia API calls
+class Cache:
+
+    def __init__(self):
+        self.client = self.connect()
+        self.EXPIRE_TIME = 300
+
+    def connect(self):
+        try:
+            client = redis.Redis(
+                host="10.128.0.2",
+                port=6379,
+                password="lemotdepassedep1p1",
+                db=0,
+                socket_timeout=5,
+            )
+            ping = client.ping()
+            if ping is True:
+                return client
+            else:
+                return False
+        except redis.AuthenticationError:
+            print("Authentication to Redis failed.")
+
+
+    def get_from_cache(self):
+        data = self.get_from_cache("data")
+        if data is not None:
+            return data
+        else:
+            data = self.get_data_from_liquipedia()
+            if (data != False):
+                self.set_to_cache("data", data)
+                return data
+            else:
+                print("API Request failed and cache inexistant.")
+
+    def set_to_cache(self, value):
+        return self.client.setex("data", self.EXPIRE_TIME, value)
+
+    def get_data_from_liquipedia(self):
+        # request to Liquipedia API
+        response = requests.get(
+            "https://liquipedia.net/starcraft2/api.php?action=parse&format=json&page=Liquipedia:Upcoming_and_ongoing_matches",
+            {
+                "Accept-Encoding": "gzip",
+                "User-Agent": "Sc2Calendar/developer (mxboucher@gmail.com)",
+            }
+        )
+        # parsing html
+        if response.status_code == 200:
+            return html.fromstring(response.json()["parse"]["text"]["*"])
+        else:
+            print(response.status_code)
+            return False
 
 def main(req):
-    response = requests.get(
-        "https://liquipedia.net/starcraft2/api.php?action=parse&format=json&page=Liquipedia:Upcoming_and_ongoing_matches",
-        {
-            "Accept-Encoding": "gzip",
-            "User-Agent": "Sc2Calendar/developer (mxboucher@gmail.com)",
-        }
-    )
-    if response.status_code == 200:
-        page = html.fromstring(response.json()["parse"]["text"]["*"])
-    else:
-        return str(response.status_code)
+    cache = Cache()
+    page = cache.get_from_cache()
+    # scrapping html to create icalendar
     cal = Calendar()
     cal.add("prodid", "-//Sc2Calendar//en//")
     cal.add("version", "2.0")
