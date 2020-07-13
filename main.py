@@ -1,9 +1,10 @@
+from flask import make_response
 import requests
 from lxml import html
 from icalendar import Calendar, Event
 from datetime import datetime
 
-def main(request):
+def main(req):
     response = requests.get(
         "https://liquipedia.net/starcraft2/api.php?action=parse&format=json&page=Liquipedia:Upcoming_and_ongoing_matches",
         {
@@ -33,6 +34,6 @@ def main(request):
             event.add("dtend", datetime.fromtimestamp(time+3600))
             event.add("location", tournament + " (" + match_format + ")")
             cal.add_component(event)
-    return cal.to_ical().decode("utf-8")
-
-
+    response = make_response(cal.to_ical())
+    response.headers["Content-Disposition"] = "attachment; filename=sc2calendar.ics"
+    return response
