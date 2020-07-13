@@ -31,13 +31,13 @@ class Cache:
 
 
     def get_from_cache(self):
-        data = self.get_from_cache("data")
+        data = self.client.get("data")
         if data is not None:
             return data
         else:
             data = self.get_data_from_liquipedia()
             if (data != False):
-                self.set_to_cache("data", data)
+                self.setex("data", self.EXPIRE_TIME, data)
                 return data
             else:
                 print("API Request failed and cache inexistant.")
