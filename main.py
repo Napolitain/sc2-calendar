@@ -37,7 +37,7 @@ class Cache:
         else:
             data = self.get_data_from_liquipedia()
             if (data != False):
-                self.setex("data", self.EXPIRE_TIME, data)
+                self.client.setex("data", self.EXPIRE_TIME, data)
                 return data
             else:
                 print("API Request failed and cache inexistant.")
