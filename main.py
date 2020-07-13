@@ -56,14 +56,14 @@ class Cache:
         )
         # parsing html
         if response.status_code == 200:
-            return html.fromstring(response.json()["parse"]["text"]["*"])
+            return response.json()["parse"]["text"]["*"]
         else:
             print(response.status_code)
             return False
 
 def main(req):
     cache = Cache()
-    page = cache.get_from_cache()
+    page = html.fromstring(cache.get_from_cache())
     # scrapping html to create icalendar
     cal = Calendar()
     cal.add("prodid", "-//Sc2Calendar//en//")
