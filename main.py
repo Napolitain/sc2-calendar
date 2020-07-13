@@ -17,7 +17,7 @@ def main(req):
     else:
         return str(response.status_code)
     cal = Calendar()
-    cal.add("prodid", "-//Sc2Calendar//mxm.dk//")
+    cal.add("prodid", "-//Sc2Calendar//en//")
     cal.add("version", "2.0")
     matches = page.cssselect(".infobox_matches_content")
     for match in matches:
@@ -30,6 +30,8 @@ def main(req):
             tournament = match.cssselect(".matchticker-tournament-name a")[0].text # DH Masters Summer: EU
             event = Event()
             event.add("summary", teamleft + " - " + teamright)
+            event.add("uid", (str(time) + teamleft + teamright + tournament + "@sc2calendar").replace(" ", ""))
+            event.add("dtstamp", datetime.now())
             event.add("dtstart", datetime.fromtimestamp(time))
             event.add("dtend", datetime.fromtimestamp(time+3600))
             event.add("location", tournament + " (" + match_format + ")")
