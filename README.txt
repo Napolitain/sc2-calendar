@@ -3,16 +3,23 @@ To run locally
 1)
 docker run --name sc2calendar-redis -p 6379:6379 -d redis
 OU
-docker run -d redis
+docker start -d redis
 
 2)
-functions-framework --target main
 
-To run on google cloud functions
+================================================================================
+
+https://www.e-tinkers.com/2018/08/how-to-properly-host-flask-application-with-nginx-and-guincorn/
+https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04
+
+
+To run on production
 
 1)
 Commit
 Push
 
 2)
-Deploy
+Hook / pull
+
+3)

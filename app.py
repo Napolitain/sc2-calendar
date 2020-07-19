@@ -92,14 +92,13 @@ def main():
             event.add("summary", teamleft + " - " + teamright)
             event.add("uid", (str(time) + teamleft + teamright + tournament + "@sc2calendar").replace(" ", ""))
             event.add("dtstamp", datetime.now())
-            event.add("dtstart", datetime.fromtimestamp(time))
-            event.add("dtend", datetime.fromtimestamp(time+3600))
+            event.add("dtstart", datetime.utcfromtimestamp(time))
+            event.add("dtend", datetime.utcfromtimestamp(time+3600))
             event.add("location", tournament + " (" + match_format + ")")
             cal.add_component(event)
     response = make_response(cal.to_ical())
     response.headers["Content-Disposition"] = "attachment; filename=sc2calendar.ics"
     return response
-
 
 if __name__ == '__main__':
     app.run()
