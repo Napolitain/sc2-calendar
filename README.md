@@ -1,6 +1,6 @@
 # Project has been discontinued. To find new version, look at [the new project](https://github.com/Napolitain/sc2-calendar-2)
 
-To run locally
+`To run locally
 
 1)
 docker run --name sc2calendar-redis -p 6379:6379 -d redis
