@@ -1,3 +1,5 @@
+# Project has been discontinued. To find new version, look at [the new project](https://github.com/Napolitain/sc2-calendar-2)
+
 To run locally
 
 1)
@@ -23,3 +25,4 @@ Push
 Hook / pull
 
 3)
+Run
