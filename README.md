@@ -1,4 +1,4 @@
-# sc2-calendar has been discontinued. To find new version, look at [sc2-calendar-2](https://github.com/Napolitain/sc2-calendar-2)
+# sc2-calendar has been discontinued. To find new version, look at [liquipedia-calendar](https://github.com/Napolitain/liquipedia-calendar)
 
 ### What is it ?
 
